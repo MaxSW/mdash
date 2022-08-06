@@ -5,7 +5,6 @@ import com.xwarner.mdash.ui.ProjectSetView;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -23,18 +22,6 @@ public class Main extends Application {
 		data.load();
 		projectsView = new ProjectSetView();
 		createWindow(stage);
-	}
-
-	public void newProject() {
-		TextInputDialog input = new TextInputDialog();
-		input.setTitle("New Project");
-		input.setGraphic(null);
-		input.setHeaderText("New Project");
-		input.setContentText("Please enter the name of your new project");
-		input.showAndWait().ifPresent(response -> {
-			if (response != "") {
-			}
-		});
 	}
 
 	public void createWindow(Stage stage) {
