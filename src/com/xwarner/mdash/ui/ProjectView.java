@@ -21,7 +21,11 @@ import javafx.util.Callback;
 
 public class ProjectView extends TreeView<String> {
 
+	public Project project;
+
 	public ProjectView(Project project, Data data, ProjectSetView view) {
+		this.project = project;
+
 		TreeItem<String> rootItem = new TreeItem<String>("");
 		rootItem.getChildren().add(new RootProjectView(project));
 		for (Action action : project.getActions()) {
@@ -213,6 +217,11 @@ public class ProjectView extends TreeView<String> {
 		});
 
 		setShowRoot(false);
+
+		getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null)
+				view.resetSelected(project);
+		});
 
 	}
 

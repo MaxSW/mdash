@@ -28,7 +28,7 @@ public class ActionCellView extends TreeCell<String> {
 			setText(getString());
 			setGraphic(getTreeItem().getGraphic());
 			if (getTreeItem() instanceof RootProjectView) {
-				setStyle(" -fx-font-weight: bold ;");
+				setStyle("-fx-font-weight: bold; -fx-font-size:14px;");
 			}
 		}
 	}
