@@ -20,9 +20,12 @@ public class Data {
 	private HashMap<String, Object> params;
 	private ArrayList<Project> projects;
 
+	public static String emojiPath;
+
 	public Data() {
 		params = new HashMap<String, Object>();
 		projects = new ArrayList<Project>();
+		emojiPath = "file:" + System.getenv("APPDATA") + File.separator + "mdash" + File.separator + "twemoji" + File.separator;
 	}
 
 	public void load() throws IOException {

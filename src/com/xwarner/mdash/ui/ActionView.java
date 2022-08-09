@@ -1,5 +1,6 @@
 package com.xwarner.mdash.ui;
 
+import com.xwarner.mdash.Data;
 import com.xwarner.mdash.actions.Action;
 
 import javafx.scene.control.TreeItem;
@@ -27,8 +28,7 @@ public class ActionView extends TreeItem<String> {
 		this.action = action;
 		this.setValue(action.getName());
 		if (action.hasIcon()) {
-			ImageView icon = new ImageView(
-					new Image(getClass().getResourceAsStream("../../../../twemoji/" + action.getIconHex() + ".png")));
+			ImageView icon = new ImageView(new Image(Data.emojiPath + action.getIconHex() + ".png"));
 			icon.setFitWidth(24.0);
 			icon.setFitHeight(24.0);
 			this.setGraphic(icon);

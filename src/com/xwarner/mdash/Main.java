@@ -31,7 +31,7 @@ public class Main extends Application {
 		root.getChildren().addAll(projectsView, new MenuBarView(data, projectsView, stage));
 		stage.setTitle("MDASH " + version);
 		stage.setScene(new Scene(root, 400, 300));
-		stage.getIcons().add(new Image(getClass().getResourceAsStream("../../../twemoji/1f5c3.png")));
+		stage.getIcons().add(new Image(Data.emojiPath + "1f5c3.png"));
 		stage.show();
 	}
 
