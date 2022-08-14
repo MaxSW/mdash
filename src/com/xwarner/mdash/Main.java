@@ -12,12 +12,14 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	public static final String version = "1.0";
+	public static final String version = "1.2";
 
 	private Data data;
 	private ProjectSetView projectsView;
+	private Stage stage;
 
 	public void start(Stage stage) throws Exception {
+		this.stage = stage;
 		data = new Data();
 		data.load();
 		projectsView = new ProjectSetView();
@@ -30,9 +32,23 @@ public class Main extends Application {
 		VBox.setVgrow(projectsView, Priority.ALWAYS);
 		root.getChildren().addAll(projectsView, new MenuBarView(data, projectsView, stage));
 		stage.setTitle("MDASH " + version);
-		stage.setScene(new Scene(root, 400, 300));
+		if (data.hasParam("width")) {
+			stage.setScene(new Scene(root, data.getIntParam("width"), data.getIntParam("height")));
+		} else {
+			stage.setScene(new Scene(root, 400, 300));
+		}
 		stage.getIcons().add(new Image(Data.emojiPath + "1f5c3.png"));
 		stage.show();
+	}
+
+	public void stop() {
+		data.setParam("width", (int) stage.getWidth());
+		data.setParam("height", (int) stage.getHeight());
+		try {
+			data.save();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {

@@ -11,8 +11,6 @@ import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javafx.scene.layout.HBox;
-
 public class Data {
 
 	private File file;
@@ -25,14 +23,14 @@ public class Data {
 	public Data() {
 		params = new HashMap<String, Object>();
 		projects = new ArrayList<Project>();
-		emojiPath = "file:" + System.getenv("APPDATA") + File.separator + "mdash" + File.separator + "twemoji" + File.separator;
+		emojiPath = "file:" + System.getenv("APPDATA") + File.separator + "mdash" + File.separator + "twemoji"
+				+ File.separator;
 	}
 
 	public void load() throws IOException {
 		String path = System.getenv("APPDATA") + File.separator + "mdash" + File.separator + "config.json";
 		file = new File(path);
 		if (!file.exists()) {
-			System.out.println("Doesn't exist");
 			file.getParentFile().mkdirs();
 
 			JSONObject out = new JSONObject();
@@ -51,6 +49,11 @@ public class Data {
 					projects.add(new Project((JSONObject) o));
 				}
 			}
+			for (String name : obj.keySet()) {
+				if (!name.equals("projects")) {
+					params.put(name, obj.get(name));
+				}
+			}
 		}
 	}
 
@@ -63,14 +66,13 @@ public class Data {
 		}
 		out.put("projects", array);
 
+		for (String name : params.keySet()) {
+			out.put(name, params.get(name));
+		}
+
 		BufferedWriter writer = new BufferedWriter(new FileWriter(this.file));
 		writer.write(out.toString());
 		writer.close();
-	}
-
-	public HBox createTree() {
-		HBox box = new HBox();
-		return box;
 	}
 
 	public void createProject(Project newProject) {
@@ -83,6 +85,18 @@ public class Data {
 
 	public void deleteProject(Project project) {
 		projects.remove(project);
+	}
+
+	public boolean hasParam(String name) {
+		return params.containsKey(name);
+	}
+
+	public int getIntParam(String name) {
+		return (Integer) (params.get(name));
+	}
+
+	public void setParam(String name, Object value) {
+		params.put(name, value);
 	}
 
 }
