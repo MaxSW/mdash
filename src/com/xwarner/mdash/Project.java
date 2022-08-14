@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.xwarner.mdash.actions.Action;
+import com.xwarner.mdash.actions.FileAction;
 import com.xwarner.mdash.actions.FolderAction;
 import com.xwarner.mdash.actions.WebAction;
 
@@ -26,6 +27,8 @@ public class Project {
 				this.actions.add(new FolderAction(jobj));
 			} else if (jobj.getString("type").equals("web")) {
 				this.actions.add(new WebAction(jobj));
+			} else if (jobj.getString("type").equals("file")) {
+				this.actions.add(new FileAction(jobj));
 			}
 		}
 	}

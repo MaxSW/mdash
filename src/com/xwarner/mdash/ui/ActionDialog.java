@@ -1,6 +1,7 @@
 package com.xwarner.mdash.ui;
 
 import com.xwarner.mdash.actions.Action;
+import com.xwarner.mdash.actions.FileAction;
 import com.xwarner.mdash.actions.FolderAction;
 import com.xwarner.mdash.actions.WebAction;
 
@@ -42,7 +43,7 @@ public class ActionDialog extends Dialog<Action> {
 
 		Label typeLabel = new Label("Type: ");
 		GridPane.setConstraints(typeLabel, 0, 2);
-		ChoiceBox<String> type = new ChoiceBox<String>(FXCollections.observableArrayList("Folder", "Web"));
+		ChoiceBox<String> type = new ChoiceBox<String>(FXCollections.observableArrayList("Folder", "File", "Web"));
 		GridPane.setConstraints(type, 1, 2);
 		GridPane.setMargin(type, new Insets(2));
 
@@ -58,7 +59,7 @@ public class ActionDialog extends Dialog<Action> {
 				field1Label.setText("");
 				field1.setVisible(false);
 
-				if (new_value.equals("Folder")) {
+				if (new_value.equals("Folder") || new_value.equals("File")) {
 					field1Label.setText("Path");
 					field1.setVisible(true);
 				} else if (new_value.equals("Web")) {
@@ -78,6 +79,9 @@ public class ActionDialog extends Dialog<Action> {
 			} else if (action.getType().equals("web")) {
 				type.setValue("Web");
 				field1.setText(((WebAction) action).getUrl());
+			} else if (action.getType().equals("file")) {
+				type.setValue("File");
+				field1.setText(((FileAction) action).getPath());
 			}
 		}
 
@@ -107,6 +111,10 @@ public class ActionDialog extends Dialog<Action> {
 					} else if (atype.equals("Web")) {
 						WebAction action = new WebAction(name.getText(), icon.getText());
 						action.setUrl(field1.getText());
+						return action;
+					} else if (atype.equals("File")) {
+						FileAction action = new FileAction(name.getText(), icon.getText());
+						action.setPath(field1.getText());
 						return action;
 					}
 				}
