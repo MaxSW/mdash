@@ -7,8 +7,8 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
@@ -31,18 +31,21 @@ public class ProjectDialog extends Dialog<Project> {
 
 		Label iconLabel = new Label("Icon: ");
 		GridPane.setConstraints(iconLabel, 0, 1);
-		TextField icon = new TextField("");
-		GridPane.setConstraints(icon, 1, 1);
-		GridPane.setMargin(icon, new Insets(2));
+
+		EmojiPicker picker = new EmojiPicker();
+		ScrollPane pickerPane = new ScrollPane(picker);
+		GridPane.setConstraints(pickerPane, 1, 1);
+		GridPane.setMargin(pickerPane, new Insets(2));
 
 		if (project != null) {
 			name.setText(project.getName());
-			icon.setText(project.getIconHex());
+			picker.setEmoji(project.getIconHex());
 		}
 
-		root.getChildren().addAll(nameLabel, name, iconLabel, icon);
+		root.getChildren().addAll(nameLabel, name, iconLabel, pickerPane);
 
 		this.getDialogPane().contentProperty().set(root);
+		this.getDialogPane().setMaxHeight(400);
 
 		if (project == null) {
 			this.getDialogPane().getButtonTypes().addAll(new ButtonType("Create", ButtonData.OK_DONE),
@@ -57,7 +60,7 @@ public class ProjectDialog extends Dialog<Project> {
 					return null;
 				else if (btype.getButtonData() == ButtonData.OK_DONE) {
 					Project project = new Project(name.getText());
-					project.setIconHex(icon.getText());
+					project.setIconHex(picker.getEmoji());
 					return project;
 				}
 				return null;

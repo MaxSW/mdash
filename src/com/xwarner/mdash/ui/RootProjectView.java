@@ -16,7 +16,7 @@ public class RootProjectView extends TreeItem<String> {
 	public void update(Project project) {
 		this.setValue(project.getName());
 		if (project.hasIcon()) {
-			ImageView icon = new ImageView(new Image(Data.emojiPath + project.getIconHex() + ".png"));
+			ImageView icon = new ImageView(Data.emojis.get(project.getIconHex()));
 			icon.setFitWidth(24.0);
 			icon.setFitHeight(24.0);
 			this.setGraphic(icon);

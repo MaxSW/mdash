@@ -14,6 +14,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
@@ -37,9 +38,11 @@ public class ActionDialog extends Dialog<Action> {
 
 		Label iconLabel = new Label("Icon: ");
 		GridPane.setConstraints(iconLabel, 0, 1);
-		TextField icon = new TextField("");
-		GridPane.setConstraints(icon, 1, 1);
-		GridPane.setMargin(icon, new Insets(2));
+
+		EmojiPicker picker = new EmojiPicker();
+		ScrollPane pickerPane = new ScrollPane(picker);
+		GridPane.setConstraints(pickerPane, 1, 1);
+		GridPane.setMargin(pickerPane, new Insets(2));
 
 		Label typeLabel = new Label("Type: ");
 		GridPane.setConstraints(typeLabel, 0, 2);
@@ -71,7 +74,7 @@ public class ActionDialog extends Dialog<Action> {
 
 		if (action != null) {
 			name.setText(action.getName());
-			icon.setText(action.getIconHex());
+			picker.setEmoji(action.getIconHex());
 			type.setDisable(true);
 			if (action.getType().equals("folder")) {
 				type.setValue("Folder");
@@ -87,9 +90,10 @@ public class ActionDialog extends Dialog<Action> {
 
 		GridPane.setConstraints(type, 1, 2);
 
-		root.getChildren().addAll(nameLabel, name, iconLabel, icon, typeLabel, type, field1Label, field1);
+		root.getChildren().addAll(nameLabel, name, iconLabel, pickerPane, typeLabel, type, field1Label, field1);
 
 		this.getDialogPane().contentProperty().set(root);
+		this.getDialogPane().setMaxHeight(400);
 
 		if (action == null) {
 			this.getDialogPane().getButtonTypes().addAll(new ButtonType("Create", ButtonData.OK_DONE),
@@ -105,15 +109,15 @@ public class ActionDialog extends Dialog<Action> {
 				else if (btype.getButtonData() == ButtonData.OK_DONE) {
 					String atype = type.getValue();
 					if (atype.equals("Folder")) {
-						FolderAction action = new FolderAction(name.getText(), icon.getText());
+						FolderAction action = new FolderAction(name.getText(), picker.getEmoji());
 						action.setPath(field1.getText());
 						return action;
 					} else if (atype.equals("Web")) {
-						WebAction action = new WebAction(name.getText(), icon.getText());
+						WebAction action = new WebAction(name.getText(), picker.getEmoji());
 						action.setUrl(field1.getText());
 						return action;
 					} else if (atype.equals("File")) {
-						FileAction action = new FileAction(name.getText(), icon.getText());
+						FileAction action = new FileAction(name.getText(), picker.getEmoji());
 						action.setPath(field1.getText());
 						return action;
 					}

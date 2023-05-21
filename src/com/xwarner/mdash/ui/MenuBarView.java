@@ -14,7 +14,7 @@ public class MenuBarView extends HBox {
 
 	private boolean onTop;
 
-	public MenuBarView(Data data, ProjectSetView view, Stage stage) {
+	public MenuBarView(ProjectSetView view, Stage stage) {
 		/*
 		 * Menu menu = new Menu("File"); MenuItem newProjectItem = new
 		 * MenuItem("New Project"); newProjectItem.setOnAction(e -> { ProjectDialog
@@ -37,10 +37,10 @@ public class MenuBarView extends HBox {
 			ProjectDialog input = new ProjectDialog(null);
 			input.showAndWait().ifPresent(newProject -> {
 				if (newProject != null) {
-					data.createProject(newProject);
-					view.addProject(newProject, data);
+					Data.createProject(newProject);
+					view.addProject(newProject);
 					try {
-						data.save();
+						Data.save();
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}

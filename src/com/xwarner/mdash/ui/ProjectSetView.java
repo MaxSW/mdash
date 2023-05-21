@@ -8,14 +8,14 @@ import javafx.scene.layout.HBox;
 
 public class ProjectSetView extends HBox {
 
-	public void create(Data data) {
-		for (Project project : data.getProjects()) {
-			getChildren().add(new ProjectView(project, data, this));
+	public void create() {
+		for (Project project : Data.getProjects()) {
+			getChildren().add(new ProjectView(project, this));
 		}
 	}
 
-	public void addProject(Project project, Data data) {
-		getChildren().add(new ProjectView(project, data, this));
+	public void addProject(Project project) {
+		getChildren().add(new ProjectView(project, this));
 	}
 
 	public void resetSelected(Project project) {

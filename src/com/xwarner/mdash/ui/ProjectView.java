@@ -23,7 +23,7 @@ public class ProjectView extends TreeView<String> {
 
 	public Project project;
 
-	public ProjectView(Project project, Data data, ProjectSetView view) {
+	public ProjectView(Project project, ProjectSetView view) {
 		this.project = project;
 
 		TreeItem<String> rootItem = new TreeItem<String>("");
@@ -48,7 +48,7 @@ public class ProjectView extends TreeView<String> {
 					rootItem.getChildren().add(new ActionView(action));
 					project.addAction(action);
 					try {
-						data.save();
+						Data.save();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -67,7 +67,7 @@ public class ProjectView extends TreeView<String> {
 							project.update(newProject);
 							((RootProjectView) rootItem.getChildren().get(0)).update(newProject);
 							try {
-								data.save();
+								Data.save();
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
@@ -84,7 +84,7 @@ public class ProjectView extends TreeView<String> {
 							}
 							project.updateAction(name, action);
 							try {
-								data.save();
+								Data.save();
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
@@ -103,9 +103,9 @@ public class ProjectView extends TreeView<String> {
 					alert.showAndWait().ifPresent(action -> {
 						if (action == ButtonType.YES) {
 							view.getChildren().remove(this);
-							data.deleteProject(project);
+							Data.deleteProject(project);
 							try {
-								data.save();
+								Data.save();
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
@@ -125,7 +125,7 @@ public class ProjectView extends TreeView<String> {
 							rootItem.getChildren().remove(toRemove);
 							project.deleteAction(name);
 							try {
-								data.save();
+								Data.save();
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
@@ -139,7 +139,7 @@ public class ProjectView extends TreeView<String> {
 			if (this.getSelectionModel().getSelectedItem() != null) {
 				String name = this.getSelectionModel().getSelectedItem().getValue();
 				if (name.equals(project.getName())) {
-					ArrayList<Project> projects = data.getProjects();
+					ArrayList<Project> projects = Data.getProjects();
 					int loc = projects.indexOf(project);
 					if (loc == 0)
 						return;
@@ -150,7 +150,7 @@ public class ProjectView extends TreeView<String> {
 					view.getChildren().clear();
 					view.getChildren().addAll(list);
 					try {
-						data.save();
+						Data.save();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -163,7 +163,7 @@ public class ProjectView extends TreeView<String> {
 					Collections.swap(actions, loc, loc - 1);
 					Collections.swap(rootItem.getChildren(), loc + 1, loc);
 					try {
-						data.save();
+						Data.save();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -175,7 +175,7 @@ public class ProjectView extends TreeView<String> {
 			if (this.getSelectionModel().getSelectedItem() != null) {
 				String name = this.getSelectionModel().getSelectedItem().getValue();
 				if (name.equals(project.getName())) {
-					ArrayList<Project> projects = data.getProjects();
+					ArrayList<Project> projects = Data.getProjects();
 					int loc = projects.indexOf(project);
 					if (loc == projects.size() - 1)
 						return;
@@ -186,7 +186,7 @@ public class ProjectView extends TreeView<String> {
 					view.getChildren().clear();
 					view.getChildren().addAll(list);
 					try {
-						data.save();
+						Data.save();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -199,7 +199,7 @@ public class ProjectView extends TreeView<String> {
 					Collections.swap(actions, loc, loc + 1);
 					Collections.swap(rootItem.getChildren(), loc + 1, loc + 2);
 					try {
-						data.save();
+						Data.save();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
