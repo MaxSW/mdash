@@ -1,6 +1,9 @@
 package com.xwarner.mdash.ui;
 
+import java.lang.reflect.Constructor;
+
 import com.xwarner.mdash.actions.Action;
+import com.xwarner.mdash.actions.Attribute;
 import com.xwarner.mdash.actions.FileAction;
 import com.xwarner.mdash.actions.FolderAction;
 import com.xwarner.mdash.actions.WebAction;
@@ -46,7 +49,8 @@ public class ActionDialog extends Dialog<Action> {
 
 		Label typeLabel = new Label("Type: ");
 		GridPane.setConstraints(typeLabel, 0, 2);
-		ChoiceBox<String> type = new ChoiceBox<String>(FXCollections.observableArrayList("Folder", "File", "Web"));
+		// TODO get this from somewhere
+		ChoiceBox<String> type = new ChoiceBox<String>(FXCollections.observableArrayList(Action.actions.keySet()));
 		GridPane.setConstraints(type, 1, 2);
 		GridPane.setMargin(type, new Insets(2));
 
@@ -57,36 +61,57 @@ public class ActionDialog extends Dialog<Action> {
 		GridPane.setConstraints(field1, 1, 3);
 		GridPane.setMargin(field1, new Insets(2));
 
+		if (action != null) {
+			name.setText(action.getName());
+			picker.setEmoji(action.getIconHex());
+
+			type.setDisable(true);
+			String typeName = action.getType();
+			type.setValue(typeName.substring(0, 1).toUpperCase() + typeName.substring(1));
+
+			// load attributes from field class
+
+			// TODO handle more than one attribute
+			if (action.attributes.size() > 0) {
+				// TODO check if editable
+				Attribute attribute = action.attributes.get(action.attributes.keySet().toArray()[0]);
+				field1Label.setText(attribute.displayName);
+				field1.setText((String) attribute.value);
+				field1.setVisible(true);
+			}
+		}
+
 		type.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> ob_value, String old_value, String new_value) {
 				field1Label.setText("");
 				field1.setVisible(false);
 
-				if (new_value.equals("Folder") || new_value.equals("File")) {
-					field1Label.setText("Path");
-					field1.setVisible(true);
-				} else if (new_value.equals("Web")) {
-					field1Label.setText("URL");
-					field1.setVisible(true);
+				// TODO there must be a better way of doing this - but I don't want to store the
+				// config data in more than one place
+				if (Action.actions.containsKey(new_value)) {
+					try {
+						Class actionClass = Action.actions.get(new_value);
+						Class[] types = { String.class, String.class };
+						Constructor constructor = actionClass.getConstructor(types);
+						Object[] parameters = { "", "" };
+						Action instance = (Action) constructor.newInstance(parameters);
+
+						// TODO handle more than one attribute
+						if (instance.attributes.size() > 0) {
+							// TODO check if editable
+							Attribute attribute = instance.attributes.get(instance.attributes.keySet().toArray()[0]);
+							field1Label.setText(attribute.displayName);
+							field1.setText((String) attribute.value);
+							field1.setVisible(true);
+						}
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
 				}
 			}
 		});
-
-		if (action != null) {
-			name.setText(action.getName());
-			picker.setEmoji(action.getIconHex());
-			type.setDisable(true);
-			if (action.getType().equals("folder")) {
-				type.setValue("Folder");
-				field1.setText(((FolderAction) action).getPath());
-			} else if (action.getType().equals("web")) {
-				type.setValue("Web");
-				field1.setText(((WebAction) action).getUrl());
-			} else if (action.getType().equals("file")) {
-				type.setValue("File");
-				field1.setText(((FileAction) action).getPath());
-			}
-		}
 
 		GridPane.setConstraints(type, 1, 2);
 

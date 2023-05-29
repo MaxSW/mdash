@@ -7,41 +7,31 @@ import org.json.JSONObject;
 
 public class FileAction extends Action {
 
-	private String path;
-
 	public FileAction(JSONObject obj) {
 		super(obj);
 		if (obj.has("path"))
-			this.path = obj.getString("path");
+			this.attributes.put("path", new Attribute("Path", obj.getString("path")));
+		else
+			this.attributes.put("path", new Attribute("Path"));
 		this.type = "file";
 	}
 
 	public FileAction(String name, String icon) {
 		super(name, icon);
+		this.attributes.put("path", new Attribute("Path"));
 		this.type = "file";
 	}
 
 	public String getPath() {
-		return path;
+		return (String) this.attributes.get("path").value;
 	}
 
 	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public JSONObject toJSONObject() {
-		JSONObject obj = super.toJSONObject();
-		obj.put("path", this.path);
-		return obj;
-	}
-
-	public void update(Action action) {
-		super.update(action);
-		this.path = ((FileAction) action).getPath();
+		this.attributes.get("path").value = path;
 	}
 
 	public void run() throws Exception {
-		File file = new File(this.path);
+		File file = new File((String) this.attributes.get("path").value);
 		Desktop desktop = Desktop.getDesktop();
 		desktop.open(file);
 	}

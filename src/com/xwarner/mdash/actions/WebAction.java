@@ -7,41 +7,31 @@ import org.json.JSONObject;
 
 public class WebAction extends Action {
 
-	private String url;
-
 	public WebAction(JSONObject obj) {
 		super(obj);
 		if (obj.has("url"))
-			this.url = obj.getString("url");
+			this.attributes.put("url", new Attribute("URL", obj.getString("url")));
+		else
+			this.attributes.put("url", new Attribute("URL"));
 		this.type = "web";
 	}
 
 	public WebAction(String name, String icon) {
 		super(name, icon);
+		this.attributes.put("url", new Attribute("URL"));
 		this.type = "web";
 	}
 
 	public String getUrl() {
-		return url;
+		return (String) this.attributes.get("url").value;
 	}
 
 	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public JSONObject toJSONObject() {
-		JSONObject obj = super.toJSONObject();
-		obj.put("url", this.url);
-		return obj;
-	}
-
-	public void update(Action action) {
-		super.update(action);
-		this.url = ((WebAction) action).getUrl();
+		this.attributes.get("url").value = url;
 	}
 
 	public void run() throws Exception {
-		URI uri = new URI(this.url);
+		URI uri = new URI((String) this.attributes.get("url").value);
 		Desktop desktop = Desktop.getDesktop();
 		desktop.browse(uri);
 	}
